@@ -2,25 +2,34 @@ import React from "react";
 
 export default function Product({ product }) {
   return (
-    <div key={product.page_id} className="group relative">
-      <div className="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
-        <img
-          src={product.image_url}
-          alt={product.image_url}
-          className="w-full h-full object-center object-cover lg:w-full lg:h-full"
-        />
-      </div>
-      <div className="mt-4 flex justify-between">
-        <div>
-          <h3 className="text-sm text-gray-700">
-            <a href={product.url}>
-              <span aria-hidden="true" className="absolute inset-0" />
-              {product.name}
-            </a>
+    <div class="w-auto p-1 flex items-center ">
+      <div class="bg-white shadow-md rounded-lg max-w-sm dark:bg-gray-800 dark:border-gray-700">
+        <a href={product.url}>
+          <img
+            class="rounded-t-lg p-8 "
+            src={product.image_url}
+            alt={product.name}
+          />
+        </a>
+        <div class="px-5 pb-5 self-end">
+          <h3 class="text-gray-900 font-semibold text-xl tracking-tight dark:text-white text-2xl mb-2">
+            {product.name}
           </h3>
-          <p className="mt-1 text-sm text-gray-500">{product.description}</p>
+          <div class="flex items-center mt-2.5 mb-5 ">
+            <h6>{product.description}</h6>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-xl font-bold text-gray-900 dark:text-white">
+              {product.price}
+            </span>
+            <a
+              href={product.url}
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              More
+            </a>
+          </div>
         </div>
-        <p className="text-sm font-medium text-gray-900">{product.price}</p>
       </div>
     </div>
   );

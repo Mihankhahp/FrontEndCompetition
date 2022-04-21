@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import { fetchData } from "./Components/Api/Api";
 import Products from "./Components/Products/Products";
 import Navbar from "./Components/Navbar/Navbar"
+import { InitialState, reducer } from "./ActionCenter/Reducer";
+import { setIsLoading, setProducts, setFetchOffset, setSearchKeyWord } from "./ActionCenter/Action";
 
 function App() {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [fetchOffset, setFetchOffset] = useState(0);
-  const [search, setSearch] = useState("");
+  
+  const [{ isLoading, products, fetchOffset, searchKeyWord }, dispatch] = useReducer(reducer, InitialState)
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isLoading) return;
-      setIsLoading(true);
+      dispatch(setIsLoading(true));
       console.log("its on bottom");
     };
 
@@ -26,34 +26,25 @@ function App() {
       setTimeout(() => {
         const newFetchOffset = fetchOffset + 1
         fetchData(newFetchOffset).then((data) => {
-          setProducts((prevState) => {
-            return [...new Set([...prevState, ...data])]
-          })
-          setFetchOffset(newFetchOffset)
-          setIsLoading(false)
+          dispatch(setProducts(data))
+          dispatch(setFetchOffset(newFetchOffset))
+          dispatch(setIsLoading(false))
         }, 2000);
       })
     }
   }, [isLoading, fetchOffset]);
 
-  const handleSearch = (inpval) => {
-    setSearch(inpval)
-  }
-
-
-  const filteredProducts = products.filter(
+  const filteredProducts = products && products.filter(
     (product) => {
-      return product.description.toLowerCase().includes(search.toLowerCase())
+      return product.description.toLowerCase().includes(searchKeyWord.toLowerCase())
     }
   )
 
-  // console.log("This is Data in App Component", products);
-  // console.log("This is offset in App Component", fetchOffset);
   return (
 
     <div className="App">
-      <Navbar sendVal={handleSearch} searchKey={search} />
-      <Products products={search ? filteredProducts : products} isLoading={isLoading} />
+      <Navbar sendVal={(inpval) => dispatch(setSearchKeyWord(inpval))} searchKey={searchKeyWord} />
+      <Products products={searchKeyWord ? filteredProducts : products} isLoading={isLoading} />
     </div>
   );
 }
