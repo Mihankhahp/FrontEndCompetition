@@ -12,7 +12,7 @@ function App() {
     fetchDataWithAxios(fetchOffset).then((data) => {
       setProducts(data)
     })
-  }, []);
+  }, [fetchOffset]);
 
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function App() {
         }, 2000);
       })
     }
-  }, [isLoading]);
+  }, [isLoading,fetchOffset]);
 
 
   function handleScroll() {
