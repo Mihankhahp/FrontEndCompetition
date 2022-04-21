@@ -2,18 +2,17 @@ import React, { useEffect, useReducer } from "react";
 import { fetchData } from "./Components/Api/Api";
 import Products from "./Components/Products/Products";
 import Navbar from "./Components/Navbar/Navbar"
-import { InitialState, reducer } from "./ActionCenter/Reducer";
+import { INITIALSTATE, reducer } from "./ActionCenter/Reducer";
 import { setIsLoading, setProducts, setFetchOffset, setSearchKeyWord } from "./ActionCenter/Action";
 
 function App() {
-  
-  const [{ isLoading, products, fetchOffset, searchKeyWord }, dispatch] = useReducer(reducer, InitialState)
 
+  const [{ fetchingOffset, isLoading, products, searchKeyWord }, dispatch] = useReducer(reducer, INITIALSTATE)
+  console.log("offset Value", fetchingOffset);
   useEffect(() => {
     const handleScroll = () => {
       if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isLoading) return;
       dispatch(setIsLoading(true));
-      console.log("its on bottom");
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -24,7 +23,7 @@ function App() {
     if (!isLoading) return;
     else {
       setTimeout(() => {
-        const newFetchOffset = fetchOffset + 1
+        const newFetchOffset = fetchingOffset + 1
         fetchData(newFetchOffset).then((data) => {
           dispatch(setProducts(data))
           dispatch(setFetchOffset(newFetchOffset))
@@ -32,14 +31,12 @@ function App() {
         }, 2000);
       })
     }
-  }, [isLoading, fetchOffset]);
-
+  }, [isLoading, fetchingOffset]);
   const filteredProducts = products && products.filter(
     (product) => {
       return product.description.toLowerCase().includes(searchKeyWord.toLowerCase())
     }
   )
-
   return (
 
     <div className="App">

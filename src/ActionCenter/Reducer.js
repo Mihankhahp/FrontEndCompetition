@@ -1,10 +1,10 @@
 import { ACTIONS } from "./Action"
 
-export const InitialState = {
+export const INITIALSTATE = {
     isLoading: true,
     products: [],
-    fecthOffset: 0,
-    searchKeyWord: ''
+    searchKeyWord: '',
+    fetchingOffset: 0,
 
 }
 export function reducer(state, action) {
@@ -25,17 +25,16 @@ function setLoading(state, payload) {
     }
 }
 function setProductsData(state, payload) {
-    console.log("pay", payload);
     return {
         ...state,
         products: [...new Set([...state.products, ...payload])]
     }
-
 }
 function setFetchOffsetNumber(state, payload) {
+    console.log("fetchingOffset in payload", payload);
     return {
         ...state,
-        fecthOffset: payload
+        fetchingOffset: payload
     }
 }
 function setSearch(state, payload) {
